@@ -20,8 +20,9 @@ const Authentication = props => {
   const [{isLoading, response, error}, doFetch] = useFetch(apiUrl)
   const [isSuccessfullSubmit, setIsSuccessfullSubmit] = useState(false)
   const [ ,setToken] = useLocalStorage('token')
-  const [ ,setCurrentUserState ] = useContext(CurrentUserContext)
+  const [ currentUserState ,setCurrentUserState ] = useContext(CurrentUserContext)
 
+  console.log(currentUserState)
 
 
 
