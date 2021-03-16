@@ -1,9 +1,7 @@
 import React from 'react'
 
 const GlobalFeed = () => {
-    return (
-        <div>globalfeed</div>
-    )
+  return <div>GlobalFeed</div>
 }
 
 export default GlobalFeed

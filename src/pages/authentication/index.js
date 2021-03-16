@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { Link, Redirect } from 'react-router-dom'
-
+import React, {useState, useEffect, useContext} from 'react'
+import {Link, Redirect} from 'react-router-dom'
 
 import useFetch from "../../hooks/useFetch";
 import useLocalStorage from "../../hooks/useLocalStorage";
-import { CurrentUserContext } from "../../contexts/currentUser";
-
+import {CurrentUserContext} from "../../contexts/currentUser";
 import BackendErrorMessages from "./components/backendErrorMessages";
 
 const Authentication = props => {
@@ -17,45 +15,44 @@ const Authentication = props => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [username, setUsername] = useState('')
-  const [{isLoading, response, error}, doFetch] = useFetch(apiUrl)
   const [isSuccessfullSubmit, setIsSuccessfullSubmit] = useState(false)
-  const [ ,setToken] = useLocalStorage('token')
-  const [ currentUserState ,setCurrentUserState ] = useContext(CurrentUserContext)
-
-  console.log(currentUserState)
-
-
+  const [{isLoading, response, error}, doFetch] = useFetch(apiUrl)
+  const [, setToken] = useLocalStorage('token')
+  const [currentUserState, setCurrentUserState] = useContext(CurrentUserContext)
+  console.log('currentUserState', currentUserState)
 
   const handleSubmit = event => {
     event.preventDefault()
 
     const user = isLogin ? {email, password} : {email, password, username}
+
     doFetch({
       method: 'post',
       data: {
         user
       }
     })
+    console.log('values', email, password)
   }
 
   useEffect(() => {
-    if(!response) {
+    if (!response) {
       return
     }
+    console.log('response', response)
     setToken(response.user.token)
     setIsSuccessfullSubmit(true)
     setCurrentUserState(state => ({
       ...state,
       isLoggedIn: true,
       isLoading: false,
-      currentUser: response.user,
+      currentUser: response.user
     }))
   }, [response, setToken, setCurrentUserState])
 
-  if(isSuccessfullSubmit) {
-    return <Redirect to='/'/>
+  if (isSuccessfullSubmit) {
+    return <Redirect to="/" />
   }
-
 
   return (
     <div className="auth-page">
@@ -66,19 +63,19 @@ const Authentication = props => {
             <p className="text-xs-center">
               <Link to={descriptionLink}>{descriptionText}</Link>
             </p>
+            {error && <BackendErrorMessages backendErrors={error.errors} />}
             <form onSubmit={handleSubmit}>
-              { error && <BackendErrorMessages backendErrors={error.errors} />}
               <fieldset>
                 {!isLogin && (
-                    <fieldset className="form-group">
-                      <input
-                          type="text"
-                          className="form-control form-control-lg"
-                          placeholder="Username"
-                          value={username}
-                          onChange={e => setUsername(e.target.value)}
-                      />
-                    </fieldset>
+                  <fieldset className="form-group">
+                    <input
+                      type="text"
+                      className="form-control form-control-lg"
+                      placeholder="Username"
+                      value={username}
+                      onChange={e => setUsername(e.target.value)}
+                    />
+                  </fieldset>
                 )}
                 <fieldset className="form-group">
                   <input
